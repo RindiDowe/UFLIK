@@ -5,8 +5,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Heart Word Heroes</title>
+
 <style>
 * { box-sizing: border-box; }
+
 body {
   margin: 0;
   padding: 20px;
@@ -14,20 +16,24 @@ body {
   font-family: Arial, sans-serif;
   color: #292443;
 }
+
 .app {
   max-width: 740px;
   margin: 25px auto;
+  padding: 28px;
   background: white;
   border-radius: 25px;
-  padding: 28px;
   box-shadow: 0 10px 35px #d8a6bc55;
   text-align: center;
 }
+
 h1 {
   color: #bd2360;
   font-size: clamp(28px, 6vw, 44px);
 }
+
 .subtitle { color: #67576b; }
+
 .choices, .controls {
   display: flex;
   gap: 10px;
@@ -35,6 +41,7 @@ h1 {
   justify-content: center;
   margin: 20px 0;
 }
+
 button {
   font: inherit;
   cursor: pointer;
@@ -46,36 +53,48 @@ button {
   font-weight: bold;
   min-height: 48px;
 }
+
 button:hover { filter: brightness(.94); }
+
 button:focus-visible, input:focus-visible {
   outline: 4px solid #f6a900;
   outline-offset: 3px;
 }
+
 .secondary { background: #6952a2; }
 .soft { background: #f8e6f0; color: #75234c; }
 .hidden { display: none; }
+
+/* Serif font gives capital I top and bottom bars */
 .word {
+  font-family: Georgia, "Times New Roman", serif;
   font-weight: bold;
-  font-size: clamp(64px, 15vw, 112px);
-  letter-spacing: 5px;
+  font-size: clamp(70px, 16vw, 120px);
+  letter-spacing: 3px;
   color: #41215c;
   margin: 20px 0;
 }
+
 .prompt { font-size: 20px; }
+
 .entry {
   width: min(100%, 440px);
   padding: 18px;
   border: 4px solid #db8bb3;
   border-radius: 18px;
   text-align: center;
-  font-size: clamp(28px, 8vw, 48px);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(32px, 8vw, 48px);
   letter-spacing: 3px;
-  text-transform: lowercase;
 }
+
+/* Do not force uppercase or lowercase visually */
+
 .entry.good {
   border-color: #26a26d;
   background: #effff5;
 }
+
 .progress {
   height: 18px;
   background: #f5e5ef;
@@ -84,120 +103,134 @@ button:focus-visible, input:focus-visible {
   margin: 20px auto;
   max-width: 500px;
 }
+
 .fill {
   height: 100%;
   width: 0;
   background: #d62e75;
   transition: width .25s;
 }
+
 .hearts {
   font-size: 29px;
   min-height: 40px;
   letter-spacing: 5px;
   overflow-wrap: anywhere;
 }
+
 .status {
   min-height: 30px;
   font-size: 20px;
   font-weight: bold;
   color: #6b2b65;
 }
+
 .small { font-size: 14px; color: #6d6070; }
 .sparkle { font-size: 55px; }
+
 @media(max-width:500px) {
   .app { padding: 18px; }
   body { padding: 8px; }
 }
 </style>
 </head>
+
 <body>
-
 <main class="app">
-  <h1>❤️ Heart Word Heroes ❤️</h1>
-  <p class="subtitle">
-    Look at the word. Type the word. Earn hearts!
-  </p>
 
-  <section id="menu">
-    <h2>Choose a round!</h2>
-    <div class="choices" id="choices"></div>
-    <p class="small">No timer. Just do your best!</p>
-  </section>
+<h1>❤️ Heart Word Heroes ❤️</h1>
 
-  <section id="play" class="hidden">
-    <p id="roundName"></p>
-    <div class="progress">
-      <div class="fill" id="fill"></div>
-    </div>
-    <p id="count"></p>
-    <div class="word" id="word"></div>
+<p class="subtitle">
+  Look at the word. Type the word. Earn hearts!
+</p>
 
-    <button class="secondary" id="hear" type="button">
-      🔊 Hear It
+<section id="menu">
+  <h2>Choose a round!</h2>
+  <div class="choices" id="choices"></div>
+  <p class="small">No timer. Just do your best!</p>
+</section>
+
+<section id="play" class="hidden">
+
+  <p id="roundName"></p>
+
+  <div class="progress">
+    <div class="fill" id="fill"></div>
+  </div>
+
+  <p id="count"></p>
+
+  <div class="word" id="word"></div>
+
+  <button class="secondary" id="hear" type="button">
+    🔊 Hear It
+  </button>
+
+  <p class="prompt">Type the word:</p>
+
+  <input
+    class="entry"
+    id="entry"
+    type="text"
+    autocomplete="off"
+    autocapitalize="off"
+    spellcheck="false"
+    aria-label="Type the heart word"
+  >
+
+  <p class="status" id="status" aria-live="polite"></p>
+
+  <div class="hearts" id="hearts"></div>
+
+  <div class="controls">
+    <button id="next" class="hidden" type="button">
+      Next Word ➜
     </button>
 
-    <p class="prompt">Type the word:</p>
-    <input
-      class="entry"
-      id="entry"
-      type="text"
-      autocomplete="off"
-      autocapitalize="off"
-      spellcheck="false"
-      aria-label="Type the heart word"
-    >
+    <button class="soft" id="back" type="button">
+      Choose Rounds
+    </button>
+  </div>
 
-    <p class="status" id="status" aria-live="polite"></p>
-    <div class="hearts" id="hearts"></div>
+</section>
 
-    <div class="controls">
-      <button id="next" class="hidden" type="button">
-        Next Word ➜
-      </button>
-      <button class="soft" id="back" type="button">
-        Choose Rounds
-      </button>
-    </div>
-  </section>
+<section id="finish" class="hidden">
+  <div class="sparkle">🎉❤️🎉</div>
+  <h2>You are a Heart Word Hero!</h2>
+  <p id="result"></p>
 
-  <section id="finish" class="hidden">
-    <div class="sparkle">🎉❤️🎉</div>
-    <h2>You are a Heart Word Hero!</h2>
-    <p id="result"></p>
-    <div class="controls">
-      <button id="again">Play This Round Again</button>
-      <button class="secondary" id="allRounds">
-        Choose Rounds
-      </button>
-    </div>
-  </section>
+  <div class="controls">
+    <button id="again">Play This Round Again</button>
+    <button class="secondary" id="allRounds">
+      Choose Rounds
+    </button>
+  </div>
+</section>
+
 </main>
 
 <script>
-// All 18 kindergarten Heart Words.
-// The word "I" has been removed completely.
-
 const rounds = [
   {
     name: 'Round 1 · Getting Started',
-    words: ['a', 'the', 'and', 'is', 'as']
+    words: ['I', 'a', 'the', 'and', 'is']
   },
   {
     name: 'Round 2 · Keep Going',
-    words: ['to', 'do', 'of', 'see', 'he']
+    words: ['as', 'to', 'do', 'of', 'see']
   },
   {
     name: 'Round 3 · Word Stars',
-    words: ['be', 'me', 'said', 'from']
+    words: ['he', 'be', 'me', 'said', 'from']
   },
   {
     name: 'Round 4 · Heart Word Heroes',
     words: ['look', 'book', 'are', 'was']
   },
   {
-    name: 'Practice All 18 Words',
+    name: 'Practice All 19 Words',
     words: [
-      'the', 'and', 'a', 'is', 'as',
+      'the', 'I', 'and', 'a', 'is', 'as',
       'said', 'to', 'do', 'of', 'see',
       'he', 'be', 'me', 'from',
       'look', 'book', 'are', 'was'
@@ -206,6 +239,7 @@ const rounds = [
 ];
 
 const $ = id => document.getElementById(id);
+
 let active = 0;
 let index = 0;
 let completed = false;
@@ -232,16 +266,19 @@ function start(n) {
 
 function draw() {
   completed = false;
+
   const round = rounds[active];
 
   $('roundName').textContent = round.name;
   $('count').textContent =
     `Word ${index + 1} of ${round.words.length}`;
+
   $('word').textContent = round.words[index];
 
   $('entry').value = '';
   $('entry').disabled = false;
   $('entry').className = 'entry';
+
   $('status').textContent = '';
   $('next').classList.add('hidden');
 
@@ -249,6 +286,7 @@ function draw() {
     `${index / round.words.length * 100}%`;
 
   $('hearts').textContent = '❤️'.repeat(index);
+
   $('entry').focus();
 }
 
@@ -256,10 +294,14 @@ function check() {
   if (completed) return;
 
   const expected = rounds[active].words[index];
-  const typed = $('entry').value.toLowerCase();
 
-  if (typed === expected) {
+  // Accept uppercase OR lowercase for every word.
+  // Both I and i are correct.
+  const typed = $('entry').value.trim().toLowerCase();
+
+  if (typed === expected.toLowerCase()) {
     completed = true;
+
     $('entry').classList.add('good');
     $('entry').disabled = true;
 
@@ -280,9 +322,12 @@ function check() {
 
     $('next').classList.remove('hidden');
     $('next').focus();
+
   } else {
     $('status').textContent =
-      typed.length ? 'Keep trying! You can fix it.' : '';
+      typed.length
+        ? 'Keep trying! You can fix it.'
+        : '';
   }
 }
 
@@ -303,6 +348,7 @@ function advance() {
   if (index >= rounds[active].words.length) {
     $('result').textContent =
       `You typed ${rounds[active].words.length} heart words!`;
+
     show('finish');
   } else {
     draw();
@@ -321,8 +367,8 @@ function speak() {
   window.speechSynthesis.cancel();
 
   const word = rounds[active].words[index];
-  const utterance = new SpeechSynthesisUtterance(word);
 
+  const utterance = new SpeechSynthesisUtterance(word);
   utterance.lang = 'en-US';
   utterance.rate = 0.75;
 
