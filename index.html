@@ -6,13 +6,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Heart Word Heroes</title>
 <style>
-:root {
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  padding: 20px;
+  background: #fff5fa;
   font-family: Arial, sans-serif;
   color: #292443;
-  background: #fff5fa;
 }
-* { box-sizing: border-box; }
-body { margin: 0; padding: 20px; }
 .app {
   max-width: 740px;
   margin: 25px auto;
@@ -25,15 +26,14 @@ body { margin: 0; padding: 20px; }
 h1 {
   color: #bd2360;
   font-size: clamp(28px, 6vw, 44px);
-  margin: 8px 0;
 }
 .subtitle { color: #67576b; }
-.choices {
+.choices, .controls {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
   justify-content: center;
-  margin: 24px 0;
+  margin: 20px 0;
 }
 button {
   font: inherit;
@@ -102,13 +102,6 @@ button:focus-visible, input:focus-visible {
   font-weight: bold;
   color: #6b2b65;
 }
-.controls {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin-top: 15px;
-}
 .small { font-size: 14px; color: #6d6070; }
 .sparkle { font-size: 55px; }
 @media(max-width:500px) {
@@ -138,9 +131,11 @@ button:focus-visible, input:focus-visible {
     </div>
     <p id="count"></p>
     <div class="word" id="word"></div>
+
     <button class="secondary" id="hear" type="button">
       🔊 Hear It
     </button>
+
     <p class="prompt">Type the word:</p>
     <input
       class="entry"
@@ -151,8 +146,10 @@ button:focus-visible, input:focus-visible {
       spellcheck="false"
       aria-label="Type the heart word"
     >
+
     <p class="status" id="status" aria-live="polite"></p>
     <div class="hearts" id="hearts"></div>
+
     <div class="controls">
       <button id="next" class="hidden" type="button">
         Next Word ➜
@@ -177,27 +174,30 @@ button:focus-visible, input:focus-visible {
 </main>
 
 <script>
+// All 18 kindergarten Heart Words.
+// The word "I" has been removed completely.
+
 const rounds = [
   {
     name: 'Round 1 · Getting Started',
-    words: ['i', 'a', 'the', 'and', 'is']
+    words: ['a', 'the', 'and', 'is', 'as']
   },
   {
     name: 'Round 2 · Keep Going',
-    words: ['as', 'to', 'do', 'of', 'see']
+    words: ['to', 'do', 'of', 'see', 'he']
   },
   {
     name: 'Round 3 · Word Stars',
-    words: ['he', 'be', 'me', 'said', 'from']
+    words: ['be', 'me', 'said', 'from']
   },
   {
     name: 'Round 4 · Heart Word Heroes',
     words: ['look', 'book', 'are', 'was']
   },
   {
-    name: 'Practice All 19 Words',
+    name: 'Practice All 18 Words',
     words: [
-      'the', 'i', 'and', 'a', 'is', 'as',
+      'the', 'and', 'a', 'is', 'as',
       'said', 'to', 'do', 'of', 'see',
       'he', 'be', 'me', 'from',
       'look', 'book', 'are', 'was'
@@ -321,12 +321,8 @@ function speak() {
   window.speechSynthesis.cancel();
 
   const word = rounds[active].words[index];
+  const utterance = new SpeechSynthesisUtterance(word);
 
-  // Pronounce lowercase i as the word "eye".
-  // This avoids the voice saying "capital I".
-  const spokenWord = word === 'i' ? 'eye' : word;
-
-  const utterance = new SpeechSynthesisUtterance(spokenWord);
   utterance.lang = 'en-US';
   utterance.rate = 0.75;
 
